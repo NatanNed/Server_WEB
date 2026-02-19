@@ -1,0 +1,15 @@
+{"time":"2026-02-19T10:33:51.779Z","method":"GET","url":"/","statusCode":200}
+{"time":"2026-02-19T10:33:52.009Z","method":"GET","url":"/favicon.ico","statusCode":200}
+{"time":"2026-02-19T10:34:00.039Z","method":"GET","url":"/about","statusCode":200}
+{"time":"2026-02-19T10:34:00.200Z","method":"GET","url":"/favicon.ico","statusCode":200}
+{"time":"2026-02-19T11:17:56.200Z","method":"GET","url":"/","statusCode":200}
+{"time":"2026-02-19T11:17:56.268Z","method":"GET","url":"/styles.css","statusCode":404}
+{"time":"2026-02-19T11:17:56.274Z","method":"GET","url":"/script.js","statusCode":200}
+{"time":"2026-02-19T11:17:56.445Z","method":"GET","url":"/favicon.ico","statusCode":404}
+{"time":"2026-02-19T11:18:01.159Z","method":"GET","url":"/about","statusCode":200}
+{"time":"2026-02-19T11:18:51.964Z","method":"GET","url":"/about","statusCode":200}
+{"time":"2026-02-19T11:19:12.821Z","method":"GET","url":"/style","statusCode":200}
+{"time":"2026-02-19T11:19:31.570Z","method":"GET","url":"/","statusCode":200}
+{"time":"2026-02-19T11:19:31.681Z","method":"GET","url":"/styles.css","statusCode":404}
+{"time":"2026-02-19T11:19:31.686Z","method":"GET","url":"/script.js","statusCode":200}
+{"time":"2026-02-19T11:20:05.743Z","method":"GET","url":"/test","statusCode":404}
