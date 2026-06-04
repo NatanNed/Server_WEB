@@ -24,7 +24,7 @@ const recipeSchema = new mongoose.Schema({
     },
   },
   cookTime: {
-    type: Number, // у хвилинах
+    type: Number,
     required: [true, "Cook time is required"],
     min: [1, "Cook time must be at least 1 minute"],
   },
@@ -33,10 +33,12 @@ const recipeSchema = new mongoose.Schema({
     required: [true, "Cuisine is required"],
     trim: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Recipe", recipeSchema);
