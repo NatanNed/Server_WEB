@@ -1,80 +1,37 @@
 const Comment = require("../models/Comment");
 const Post = require("../models/Post");
+const ApiError = require("../errors/ApiError");
+const asyncHandler = require("../middlewares/asyncHandler");
 
-// ==================== CREATE ====================
-exports.createComment = async (req, res) => {
-  try {
-    const { postId, author, content } = req.body;
+exports.createComment = asyncHandler(async (req, res) => {
+  const { postId, author, content } = req.body;
+  const postExists = await Post.findById(postId);
+  if (!postExists) throw ApiError.notFound("Пост не знайдено");
+  const comment = await Comment.create({ post: postId, author, content });
+  res.status(201).json({ success: true, data: comment, message: "Коментар додано" });
+});
 
-    // Перевіряємо, чи існує пост
-    const postExists = await Post.findById(postId);
-    if (!postExists) {
-      return res.status(404).json({ success: false, message: "Пост не знайдено" });
-    }
+exports.getCommentsByPost = asyncHandler(async (req, res) => {
+  const comments = await Comment.find({ post: req.params.postId })
+    .sort({ createdAt: -1 })
+    .populate("post", "title");
+  res.status(200).json({ success: true, count: comments.length, data: comments });
+});
 
-    const comment = await Comment.create({ post: postId, author, content });
+exports.updateComment = asyncHandler(async (req, res) => {
+  const { content } = req.body;
+  const comment = await Comment.findByIdAndUpdate(
+    req.params.id,
+    { content },
+    { new: true, runValidators: true }
+  );
+  if (!comment) throw ApiError.notFound("Коментар не знайдено");
+  res.status(200).json({ success: true, data: comment, message: "Коментар оновлено" });
+});
 
-    res.status(201).json({
-      success: true,
-      data: comment,
-      message: "Коментар додано",
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-// ==================== READ ====================
-exports.getCommentsByPost = async (req, res) => {
-  try {
-    const comments = await Comment.find({ post: req.params.postId })
-      .sort({ createdAt: -1 })
-      .populate("post", "title"); // Підтягуємо заголовок поста
-
-    res.status(200).json({ success: true, count: comments.length, data: comments });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-// ==================== UPDATE ====================
-exports.updateComment = async (req, res) => {
-  try {
-    const { content } = req.body;
-
-    const comment = await Comment.findByIdAndUpdate(
-      req.params.id,
-      { content },
-      { new: true, runValidators: true }
-    );
-
-    if (!comment) {
-      return res.status(404).json({ success: false, message: "Коментар не знайдено" });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: comment,
-      message: "Коментар оновлено",
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-// ==================== DELETE ====================
-exports.deleteComment = async (req, res) => {
-  try {
-    const comment = await Comment.findById(req.params.id);
-
-    if (!comment) {
-      return res.status(404).json({ success: false, message: "Коментар не знайдено" });
-    }
-
-    await comment.deleteOne();
-
-    res.status(200).json({ success: true, message: "Коментар видалено" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
+exports.deleteComment = asyncHandler(async (req, res) => {
+  const comment = await Comment.findById(req.params.id);
+  if (!comment) throw ApiError.notFound("Коментар не знайдено");
+  await comment.deleteOne();
+  res.status(200).json({ success: true, message: "Коментар видалено" });
+});
